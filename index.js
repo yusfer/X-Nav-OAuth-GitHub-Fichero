@@ -70,7 +70,47 @@ function readFile() {
     });
 };
 
-$(document).ready(function() {
-    $("div#form button").click(getToken);
+/*$(document).ready(function() {
+    hello.init({
+		github: '771368cd8819ef96ed9',
+	},{redirect_uri:'redirect.html',oauth_proxy : "https://auth-server.herokuapp.com/proxy"});
+	console.log("TAL")
+    hello("github").login().then(function(){
+		token=hello("github").getAuthResponse().access_token
+		console.log(token)
+		github = new Github({
+			token:token,
+			auth:"oauth"
+		});
+		console.log("antes de login" )
+    $("#repoform").html(repoHTML)
+    $("div#form button").click(getRepo);
+	},function (e){
+		alert("Signin error: " + e.error.message);
+	});
     
+});*/
+
+
+$(document).ready(function() {
+    hello.init({
+	github : "771368cd8819ef96ed9"
+    },{
+	redirect_uri : 'redirect.html',
+	oauth_proxy : "https://auth-server.herokuapp.com/proxy"
+    });
+    access = hello("github");
+    access.login({response_type: 'code'}).then( function(){
+	auth = hello("github").getAuthResponse();
+	token = auth.access_token;
+	console.log (token);
+	github = new Github({
+	    token: token,
+	    auth: "oauth"
+	});
+	$("#repoform").html(repoHTML);
+	$("#repobutton").click(getRepo);
+    }, function( e ){
+	alert('Signin error: ' + e.error.message);
+    });
 });
